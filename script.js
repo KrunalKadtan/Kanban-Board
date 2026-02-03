@@ -4,6 +4,11 @@ const done = document.querySelector('#done');
 
 const tasks = document.querySelectorAll('.task');
 
+const toggleModalButton = document.querySelector('#toggle-modal');
+const modal = document.querySelector('.modal');
+const modalBg = document.querySelector('.bg');
+const addTaskButton = document.querySelector('#add-new-task');
+
 let dragElement = null;
 
 tasks.forEach(task => {
@@ -39,3 +44,31 @@ function addDragEventsOnColumn(column) {
 addDragEventsOnColumn(todo);
 addDragEventsOnColumn(progress);
 addDragEventsOnColumn(done);
+
+toggleModalButton.addEventListener("click", event => {
+  modal.classList.toggle('active');
+})
+
+modalBg.addEventListener("click", event => {
+  modal.classList.remove('active');
+})
+
+addTaskButton.addEventListener("click", event => {
+  
+  const taskTitle = document.querySelector('#task-title-input').value;
+  const taskDesc = document.querySelector('#task-description-input').value;
+  
+  const div = document.createElement('div');
+
+  div.classList.add('task');
+  div.setAttribute("draggable", "true");
+
+  div.innerHTML = `
+    <h2>${taskTitle}</h2>
+    <p>${taskDesc}</p>
+    <button>Delete</button>
+  `
+  todo.appendChild(div);
+
+  modal.classList.remove('active');
+})
