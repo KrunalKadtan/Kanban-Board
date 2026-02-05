@@ -1,3 +1,5 @@
+let taskData = {}
+
 const todo = document.querySelector('#todo');
 const progress = document.querySelector('#progress');
 const done = document.querySelector('#done');
@@ -11,6 +13,37 @@ const addTaskButton = document.querySelector('#add-new-task');
 
 const columns = [todo, progress, done];
 let dragElement = null;
+
+if (localStorage.getItem('tasks')) {
+  const data = JSON.parse(localStorage.getItem('tasks'));
+
+  for (const col in data) {
+    const column = document.querySelector(`#${col}`);
+
+    data[col].forEach(task => {
+      const div = document.createElement('div');
+
+      div.classList.add('task');
+      div.setAttribute("draggable", "true");
+
+      div.innerHTML = `
+          <h2>${task.title}</h2>
+          <p>${task.desc}</p>
+          <button>Delete</button>
+      `
+      column.appendChild(div);
+
+
+      div.addEventListener("drag", event => {
+        dragElement = div;
+      })
+    })
+
+    const tasks = column.querySelectorAll('.task');
+    const count = column.querySelector('.right');
+    count.innerText = tasks.length;
+  }
+}
 
 tasks.forEach(task => {
   task.addEventListener("drag", event => {
@@ -43,6 +76,15 @@ function addDragEventsOnColumn(column) {
     columns.forEach(col => {
       const tasks = col.querySelectorAll('.task');
       const count = col.querySelector('.right');
+
+      taskData[col.id] = Array.from(tasks).map(task => {
+        return {
+          title: task.querySelector('h2').innerText,
+          desc: task.querySelector('p').innerText
+        }
+      })
+
+      localStorage.setItem("tasks", JSON.stringify(taskData));
 
       count.innerText = tasks.length;
     })
@@ -78,9 +120,22 @@ addTaskButton.addEventListener("click", event => {
   `
   todo.appendChild(div);
 
+
+  document.querySelector('#task-title-input').value = '';
+  document.querySelector('#task-description-input').value = '';
+
   columns.forEach(col => {
     const tasks = col.querySelectorAll('.task');
     const count = col.querySelector('.right');
+
+    taskData[col.id] = Array.from(tasks).map(task => {
+      return {
+        title: task.querySelector('h2').innerText,
+        desc: task.querySelector('p').innerText
+      }
+    })
+
+    localStorage.setItem("tasks", JSON.stringify(taskData));
 
     count.innerText = tasks.length;
   })
