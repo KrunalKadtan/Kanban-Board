@@ -9,6 +9,7 @@ const modal = document.querySelector('.modal');
 const modalBg = document.querySelector('.bg');
 const addTaskButton = document.querySelector('#add-new-task');
 
+const columns = [todo, progress, done];
 let dragElement = null;
 
 tasks.forEach(task => {
@@ -38,6 +39,13 @@ function addDragEventsOnColumn(column) {
 
     column.appendChild(dragElement);
     column.classList.remove('hover-over');
+
+    columns.forEach(col => {
+      const tasks = col.querySelectorAll('.task');
+      const count = col.querySelector('.right');
+
+      count.innerText = tasks.length;
+    })
   })
 }
 
@@ -69,6 +77,13 @@ addTaskButton.addEventListener("click", event => {
     <button>Delete</button>
   `
   todo.appendChild(div);
+
+  columns.forEach(col => {
+    const tasks = col.querySelectorAll('.task');
+    const count = col.querySelector('.right');
+
+    count.innerText = tasks.length;
+  })
 
   div.addEventListener("drag", event => {
     dragElement = div;
