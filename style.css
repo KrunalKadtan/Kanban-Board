@@ -48,6 +48,9 @@ main {
 }
 
 nav {
+  position: sticky;
+  top: 0;
+  background-color: var(--bg-primary-color);
   padding: var(--nav-pd);
   display: flex;
   align-items: center;
@@ -76,6 +79,7 @@ section {
 section .task-cols {
   background-color: var(--bg-button-color);
   flex-grow: 1;
+  width: 100%;
   padding: var(--pd-md);
   border-radius: var(--border-radius-md);
   display: flex;
